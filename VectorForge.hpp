@@ -18,7 +18,7 @@
 //COMMERCIAL LICENSING
 //This software is distributed under the GNU General Public License
 //version 3. The copyright holder reserves the right to license it
-//under separate commercial terms; no such licence is granted except
+//under separate commercial terms; no such license is granted except
 //by written agreement with the copyright holder.
 
 #pragma once
