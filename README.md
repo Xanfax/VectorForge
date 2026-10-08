@@ -5,12 +5,12 @@
 [![C++](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](#)
 [![ISA](https://img.shields.io/badge/ISA-AVX2%20%2B%20FMA3-orange.svg)](#)
 
-Header-only AVX2 vector math library for C++. One header, no external dependencies.
+Header-only AVX2 vector math library for C++. One header, no required dependencies.
 
 ```cpp
 #include "VectorForge.hpp"
 
-VFX::Float8 Values;
+VFX::float8 Values;
 Values <= 1.5f;                      // splat
 
 VFX::AVXF8 Registers;
@@ -41,6 +41,8 @@ Copy `VectorForge.hpp` into your include path. That's the whole install.
 using namespace VFX;   // optional
 ```
 
+DirectXMath is optional. If it's on the include path, interop turns on automatically — see [DirectXMath interop](#directxmath-interop).
+
 ## Types
 
 Everything lives in namespace `VFX`.
@@ -51,7 +53,7 @@ Plain memory, aligned where a register fills them.
 
 | Float | Double | Integer |
 | :--- | :--- | :--- |
-| `Float2` `Float3` `Float4` `Float8` | `Double2` `Double3` `Double4` | `Int2` `Int3` `Int4` `Int8` `Int16` `Int32` |
+| `float2` `float3` `float4` `float8` | `double2` `double3` `double4` | `int2` `int3` `int4` `int8` `int16` `int32` |
 
 ### Register types
 
@@ -59,14 +61,14 @@ One 128/256-bit register wrapped in a struct.
 
 | Type | Register | Lanes | Pairs with |
 | :--- | :--- | :--- | :--- |
-| `AVXF3` | `__m128` | 3 × f32 | `Float3` |
-| `AVXF4` | `__m128` | 4 × f32 | `Float4` |
-| `AVXF8` | `__m256` | 8 × f32 | `Float8` |
-| `AVXD4` | `__m256d` | 4 × f64 | `Double4` |
-| `AVXI4` | `__m256i` | 4 × i64 | `Int4` |
-| `AVXI8` | `__m256i` | 8 × i32 | `Int8` |
-| `AVXI16` | `__m256i` | 16 × i16 | `Int16` |
-| `AVXI32` | `__m256i` | 32 × i8 | `Int32` |
+| `AVXF3` | `__m128` | 3 × f32 | `float3` |
+| `AVXF4` | `__m128` | 4 × f32 | `float4` |
+| `AVXF8` | `__m256` | 8 × f32 | `float8` |
+| `AVXD4` | `__m256d` | 4 × f64 | `double4` |
+| `AVXI4` | `__m256i` | 4 × i64 | `int4` |
+| `AVXI8` | `__m256i` | 8 × i32 | `int8` |
+| `AVXI16` | `__m256i` | 16 × i16 | `int16` |
+| `AVXI32` | `__m256i` | 32 × i8 | `int32` |
 
 > [!NOTE]
 > Integer types are named by **lane count**, not lane width. `AVXI8` is eight 32-bit lanes; `AVXI32` is thirty-two 8-bit lanes. A 256-bit integer register carries no lane width of its own, so the width lives in the type.
@@ -83,7 +85,7 @@ Combine(Lower, Upper, Wide);      // two AVXF4 -> one AVXF8
 Split(Wide, Lower, Upper);        // one AVXF8 -> two AVXF4
 ```
 
-`LoadAVX` also builds a wide register directly from narrow storage types — two `Float4`, four `Float2`, or two `Double2` into one `AVXF8`/`AVXD4`.
+`LoadAVX` also builds a wide register directly from narrow storage types — two `float4`, four `float2`, or two `double2` into one `AVXF8`/`AVXD4`.
 
 ## API
 
@@ -149,6 +151,32 @@ Register-type `DotProduct` broadcasts its result to every lane rather than retur
 
 > [!WARNING]
 > `AVXF3` leaves the `w` lane **unspecified**. `DotProduct` masks it off, but the arithmetic operators do not — garbage in `w` propagates through `+`, `-`, `*` and `/`. Zero it on load, or ignore it on read.
+
+## DirectXMath interop
+
+If `<DirectXMath.h>` is reachable on the include path, VectorForge includes it and defines `XMATH`. Nothing to configure — detection uses `__has_include` at compile time.
+
+With it enabled, the float storage types convert to and from their DirectXMath counterparts by plain assignment:
+
+| VectorForge | DirectXMath |
+| :--- | :--- |
+| `float2` | `DirectX::XMFLOAT2` |
+| `float3` | `DirectX::XMFLOAT3` |
+| `float4` | `DirectX::XMFLOAT4` |
+
+```cpp
+DirectX::XMFLOAT3 Position = { 1.f, 2.f, 3.f };
+
+VFX::float3 Local = Position;    // XMFLOAT3 -> float3
+Position = Local;                // float3 -> XMFLOAT3
+```
+
+- **Conversion only.** No DirectXMath operators are added, and `XMVECTOR` is not wrapped — go through `XMLoadFloat3` / `XMStoreFloat3` on the DirectXMath side as usual.
+- **Storage types only.** Register types (`AVXF3`, `AVXF4`, …) have no DirectXMath conversions; load from the storage type.
+- **Mixed arithmetic follows the left-operand rule.** `Local + Position` compiles, because `Position` converts to `float3`. `Position + Local` does not, because conversions are never applied to the left-hand object of a member operator.
+
+> [!NOTE]
+> Detection checks that the header *exists*, not that you want it. Every translation unit that includes VectorForge on a machine with the Windows SDK pays the cost of parsing DirectXMath.
 
 ## License
 
