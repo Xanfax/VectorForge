@@ -1,4 +1,4 @@
-//VectorForge 0.3.2 advanced vector math library
+//VectorForge 0.3.0 advanced vector math library
 //Copyright (c) 2026 StellarWorks/Xada Engine
 //
 //SPDX-License-Identifier: GPL-3.0-only
@@ -1230,6 +1230,7 @@ namespace VFX {
 
         //Vector-vector
         AVXF3 operator+(const AVXF3& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
+        AVXF3& operator+=(const AVXF3& Second) { Raw = _mm_add_ps(Raw, Second.Raw); return *this; }
         AVXF3 operator-(const AVXF3& Second) const { return { _mm_sub_ps(Raw, Second.Raw) }; }
         AVXF3 operator*(const AVXF3& Second) const { return { _mm_mul_ps(Raw, Second.Raw) }; }
         AVXF3 operator/(const AVXF3& Second) const { return { _mm_div_ps(Raw, Second.Raw) }; }
@@ -1259,6 +1260,7 @@ namespace VFX {
 
         //Vector-vector
         AVXF4 operator+(const AVXF4& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
+        AVXF4& operator+=(const AVXF4& Second) { Raw = _mm_add_ps(Raw, Second.Raw); return *this; }
         AVXF4 operator-(const AVXF4& Second) const { return { _mm_sub_ps(Raw, Second.Raw) }; }
         AVXF4 operator*(const AVXF4& Second) const { return { _mm_mul_ps(Raw, Second.Raw) }; }
         AVXF4 operator/(const AVXF4& Second) const { return { _mm_div_ps(Raw, Second.Raw) }; }
@@ -1288,6 +1290,7 @@ namespace VFX {
 
         //Vector-vector
         AVXF8 operator+(const AVXF8& Second) const { return { _mm256_add_ps(Raw, Second.Raw) }; }
+        AVXF8& operator+=(const AVXF8& Second) { Raw = _mm256_add_ps(Raw, Second.Raw); return *this; }
         AVXF8 operator-(const AVXF8& Second) const { return { _mm256_sub_ps(Raw, Second.Raw) }; }
         AVXF8 operator*(const AVXF8& Second) const { return { _mm256_mul_ps(Raw, Second.Raw) }; }
         AVXF8 operator/(const AVXF8& Second) const { return { _mm256_div_ps(Raw, Second.Raw) }; }
@@ -1317,6 +1320,7 @@ namespace VFX {
 
         //Vector-vector
         AVXD4 operator+(const AVXD4& Second) const { return { _mm256_add_pd(Raw, Second.Raw) }; }
+        AVXD4& operator+=(const AVXD4& Second) { Raw = _mm256_add_pd(Raw, Second.Raw); return *this; }
         AVXD4 operator-(const AVXD4& Second) const { return { _mm256_sub_pd(Raw, Second.Raw) }; }
         AVXD4 operator*(const AVXD4& Second) const { return { _mm256_mul_pd(Raw, Second.Raw) }; }
         AVXD4 operator/(const AVXD4& Second) const { return { _mm256_div_pd(Raw, Second.Raw) }; }
