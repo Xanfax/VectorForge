@@ -1,4 +1,4 @@
-//VectorForge 0.3.0 advanced vector math library
+//VectorForge 0.3.2 advanced vector math library
 //Copyright (c) 2026 StellarWorks/Xada Engine
 //
 //SPDX-License-Identifier: GPL-3.0-only
@@ -134,6 +134,8 @@ namespace VFX {
             y = Second;
             return *this;
         }
+        //Negate
+        float2 operator-() const { return float2(-x, -y); }
 
         bool operator==(const float2&) const = delete;
         bool operator!=(const float2&) const = delete;
@@ -225,6 +227,9 @@ namespace VFX {
             z = Second;
             return *this;
         }
+
+        //Negate
+        float3 operator-() const { return float3(-x, -y, -z); }
 
         bool operator==(const float3&) const = delete;
         bool operator!=(const float3&) const = delete;
@@ -325,6 +330,9 @@ namespace VFX {
             return *this;
         }
 
+        //Negate
+        float4 operator-() const { return float4(-x, -y, -z, -w); }
+
         bool operator==(const float4&) const = delete;
         bool operator!=(const float4&) const = delete;
         bool operator<(const float4&) const = delete;
@@ -412,6 +420,15 @@ namespace VFX {
             return *this;
         }
 
+        //Negate
+        float8 operator-() const {
+            float8 Result;
+            for (size_t Index = 0; Index < 8; Index++) {
+                Result.Data[Index] = -Data[Index];
+            }
+            return Result;
+        }
+
         bool operator==(const float8&) const = delete;
         bool operator!=(const float8&) const = delete;
         bool operator<(const float8&) const = delete;
@@ -486,6 +503,9 @@ namespace VFX {
             y = Second;
             return *this;
         }
+
+        //Negate
+        double2 operator-() const { return double2(-x, -y); }
 
         bool operator==(const double2&) const = delete;
         bool operator!=(const double2&) const = delete;
@@ -572,6 +592,9 @@ namespace VFX {
             z = Second;
             return *this;
         }
+
+        //Negate
+        double3 operator-() const { return double3(-x, -y, -z); }
 
         bool operator==(const double3&) const = delete;
         bool operator!=(const double3&) const = delete;
@@ -666,6 +689,9 @@ namespace VFX {
             w = Second;
             return *this;
         }
+
+        //Negate
+        double4 operator-() const { return double4(-x, -y, -z, -w); }
 
         bool operator==(const double4&) const = delete;
         bool operator!=(const double4&) const = delete;
