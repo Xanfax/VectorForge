@@ -1,4 +1,5 @@
-//VectorForge 0.3.2 advanced vector math library
+//VectorForge advanced vector math library
+//Build 0.3.3 nightly
 //Copyright (c) 2026 StellarWorks/Xada Engine
 //
 //SPDX-License-Identifier: GPL-3.0-only
@@ -37,10 +38,15 @@
 
 #if defined(__has_include)
 #  if __has_include(<DirectXMath.h>)
+#    include <type_traits>
 #    include <DirectXMath.h>
-#    define XMATH 1
+#    define XMATH_IO 1
+#    if (defined(_XM_SSE_INTRINSICS_) || !defined(_XM_NO_INTRINSICS_))
+#       define VECTOR_IO 1
+#    endif
 #  endif
 #endif
+
 namespace VFX {
     //Nothing in this library is comparable: every type deletes its
     //comparison operators, because none of these answer a yes/no question
@@ -75,6 +81,11 @@ namespace VFX {
             struct { float u, v; };
             struct { float Width, Height; };
         };
+
+        #ifdef XMATH_IO
+        float2(const DirectX::XMFLOAT2& Source) { x = Source.x; y = Source.y; }
+        operator DirectX::XMFLOAT2() const { return DirectX::XMFLOAT2(x, y); }
+        #endif
 
         //Vector-vector
         float2 operator+(const float2 Second) const {
@@ -134,6 +145,7 @@ namespace VFX {
             y = Second;
             return *this;
         }
+
         //Negate
         float2 operator-() const { return float2(-x, -y); }
 
@@ -143,11 +155,6 @@ namespace VFX {
         bool operator>(const float2&) const = delete;
         bool operator>=(const float2&) const = delete;
         bool operator<=>(const float2&) const = delete;
-
-        #ifdef XMATH
-        float2(const DirectX::XMFLOAT2& Source) { x = Source.x; y = Source.y; }
-        operator DirectX::XMFLOAT2() const { return DirectX::XMFLOAT2(x, y); }
-        #endif
 
         float2(float X, float Y) { x = X; y = Y; }
         float2() { x = 0.f; y = 0.f; }
@@ -159,6 +166,11 @@ namespace VFX {
             struct { float r, g, b; };
             struct { float Width, Height, Depth; };
         };
+
+        #ifdef XMATH_IO
+        float3(const DirectX::XMFLOAT3& Source) { x = Source.x; y = Source.y; z = Source.z; }
+        operator DirectX::XMFLOAT3() const { return DirectX::XMFLOAT3(x, y, z); }
+        #endif
 
         //Vector-vector
         float3 operator+(const float3 Second) const {
@@ -238,11 +250,6 @@ namespace VFX {
         bool operator>=(const float3&) const = delete;
         bool operator<=>(const float3&) const = delete;
 
-        #ifdef XMATH
-        float3(const DirectX::XMFLOAT3& Source) { x = Source.x; y = Source.y; z = Source.z; }
-        operator DirectX::XMFLOAT3() const { return DirectX::XMFLOAT3(x, y, z); }
-        #endif
-
         float3(float X, float Y, float Z) { x = X; y = Y; z = Z; }
         float3() { x = 0.f; y = 0.f; z = 0.f; }
     };
@@ -252,6 +259,11 @@ namespace VFX {
             struct { float x, y, z, w; };
             struct { float r, g, b, a; };
         };
+
+        #ifdef XMATH_IO
+        float4(const DirectX::XMFLOAT4& Source) { x = Source.x; y = Source.y; z = Source.z; w = Source.w; }
+        operator DirectX::XMFLOAT4() const { return DirectX::XMFLOAT4(x, y, z, w); }
+        #endif
 
         //Vector-vector
         float4 operator+(const float4 Second) const {
@@ -339,11 +351,6 @@ namespace VFX {
         bool operator>(const float4&) const = delete;
         bool operator>=(const float4&) const = delete;
         bool operator<=>(const float4&) const = delete;
-
-        #ifdef XMATH
-        float4(const DirectX::XMFLOAT4& Source) { x = Source.x; y = Source.y; z = Source.z; w = Source.w; }
-        operator DirectX::XMFLOAT4() const { return DirectX::XMFLOAT4(x, y, z, w); }
-        #endif
 
         float4(float X, float Y, float Z, float W) { x = X; y = Y; z = Z; w = W; }
         float4() { x = 0.f; y = 0.f; z = 0.f; w = 0.f; }
@@ -1228,6 +1235,12 @@ namespace VFX {
         //W is UNSPECIFIED for this type!
         __m128 Raw;
 
+        #ifdef VECTOR_IO
+        AVXF3() = default;
+        AVXF3(__m128 Source) : Raw(Source) {}             // in:  AVXF3 A = XMVECTOR / __m128
+        explicit operator __m128() const { return Raw; }  // out: static_cast<XMVECTOR>(A)
+        #endif
+
         //Vector-vector
         AVXF3 operator+(const AVXF3& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
         AVXF3& operator+=(const AVXF3& Second) { Raw = _mm_add_ps(Raw, Second.Raw); return *this; }
@@ -1257,6 +1270,12 @@ namespace VFX {
     //AVXF4 type, 4 floats
     struct alignas(16) AVXF4 {
         __m128 Raw;
+
+        #ifdef VECTOR_IO
+        AVXF4() = default;
+        AVXF4(__m128 Source) : Raw(Source) {}             // in:  AVXF3 A = XMVECTOR / __m128
+        explicit operator __m128() const { return Raw; }  // out: static_cast<XMVECTOR>(A)
+        #endif
 
         //Vector-vector
         AVXF4 operator+(const AVXF4& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
