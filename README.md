@@ -1,7 +1,7 @@
 # VectorForge
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-0.3.0-green.svg)](#)
+[![Version](https://img.shields.io/badge/version-0.3.2-green.svg)](#)
 [![C++](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](#)
 [![ISA](https://img.shields.io/badge/ISA-AVX2%20%2B%20FMA3-orange.svg)](#)
 
