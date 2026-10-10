@@ -1235,12 +1235,6 @@ namespace VFX {
         //W is UNSPECIFIED for this type!
         __m128 Raw;
 
-        #if defined(VECTOR_IO) && defined(XMATH_IO)
-        AVXF3() = default;
-        AVXF3(__m128 Source) : Raw(Source) {}             // in:  AVXF3 A = XMVECTOR / __m128
-        operator DirectX::XMVECTOR() const { return Raw; }  // out: static_cast<XMVECTOR>(A)
-        #endif
-
         //Vector-vector
         AVXF3 operator+(const AVXF3& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
         AVXF3& operator+=(const AVXF3& Second) { Raw = _mm_add_ps(Raw, Second.Raw); return *this; }
@@ -1270,12 +1264,6 @@ namespace VFX {
     //AVXF4 type, 4 floats
     struct alignas(16) AVXF4 {
         __m128 Raw;
-
-        #if defined(VECTOR_IO) && defined(XMATH_IO)
-        AVXF4() = default;
-        AVXF4(__m128 Source) : Raw(Source) {}             // in:  AVXF3 A = XMVECTOR / __m128
-        operator DirectX::XMVECTOR() const { return Raw; }  // out: static_cast<XMVECTOR>(A)
-        #endif
 
         //Vector-vector
         AVXF4 operator+(const AVXF4& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
