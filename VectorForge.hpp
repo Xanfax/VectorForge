@@ -1,4 +1,4 @@
-//VectorForge 0.3.0 advanced vector math library
+//VectorForge 0.3.2 advanced vector math library
 //Copyright (c) 2026 StellarWorks/Xada Engine
 //
 //SPDX-License-Identifier: GPL-3.0-only
