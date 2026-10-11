@@ -156,18 +156,22 @@ Register-type `DotProduct` broadcasts its result to every lane rather than retur
 
 If `<DirectXMath.h>` is reachable on the include path, VectorForge includes it and defines `XMATH`. Nothing to configure — detection uses `__has_include` at compile time.
 
-With it enabled, the float storage types convert to and from their DirectXMath counterparts by plain assignment:
+With it enabled, the float storage and vector3/4 types convert to and from their DirectXMath counterparts by plain assignment:
 
 | VectorForge | DirectXMath |
 | :--- | :--- |
 | `float2` | `DirectX::XMFLOAT2` |
 | `float3` | `DirectX::XMFLOAT3` |
 | `float4` | `DirectX::XMFLOAT4` |
+| `AVXF3`  | `DirectX::XMVECTOR` |
+| `AVXF4`  | `DirectX::XMVECTOR` |
 
 ```cpp
 DirectX::XMFLOAT3 Position = { 1.f, 2.f, 3.f };
+DirectX::XMVECTOR Rotation = {};
 
-VFX::float3 Local = Position;    // XMFLOAT3 -> float3
+VFX::AVXF4 LocalRegister = Rotation;
+VFX::float3 LocalStorage = Position;    // XMFLOAT3 -> float3
 Position = Local;                // float3 -> XMFLOAT3
 ```
 
