@@ -1,5 +1,5 @@
 //VectorForge advanced vector math library
-//Build 0.3.3 nightly
+//Build 0.3.3
 //Copyright (c) 2026 StellarWorks/Xada Engine
 //
 //SPDX-License-Identifier: GPL-3.0-only
