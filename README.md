@@ -175,8 +175,7 @@ VFX::float3 LocalStorage = Position;    // XMFLOAT3 -> float3
 Position = Local;                // float3 -> XMFLOAT3
 ```
 
-- **Conversion only.** No DirectXMath operators are added, and `XMVECTOR` is not wrapped — go through `XMLoadFloat3` / `XMStoreFloat3` on the DirectXMath side as usual.
-- **Storage types only.** Register types (`AVXF3`, `AVXF4`, …) have no DirectXMath conversions; load from the storage type.
+- **Conversion only.** No DirectXMath operators are added.
 - **Mixed arithmetic follows the left-operand rule.** `Local + Position` compiles, because `Position` converts to `float3`. `Position + Local` does not, because conversions are never applied to the left-hand object of a member operator.
 
 > [!NOTE]
