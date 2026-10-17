@@ -1,5 +1,5 @@
 //VectorForge advanced vector math library
-//Build 0.3.3
+//Build 0.3.4 nightly
 //Copyright (c) 2026 StellarWorks/Xada Engine
 //
 //SPDX-License-Identifier: GPL-3.0-only
@@ -1234,12 +1234,12 @@ namespace VFX {
     struct alignas(16) AVXF3 {
         //W is UNSPECIFIED for this type!
         __m128 Raw;
-
-        #if defined(VECTOR_IO) && defined(XMATH_IO)
         AVXF3() = default;
-        AVXF3(__m128 Source) : Raw(Source) {}             // in:  AVXF3 A = XMVECTOR / __m128
-        operator DirectX::XMVECTOR() const { return Raw; }  // out: static_cast<XMVECTOR>(A)
-        #endif
+        AVXF3(__m128 Source) : Raw(Source) {}
+        explicit operator __m128() const { return Raw; }
+
+        //Single vector
+        AVXF3 operator-() const { return { _mm_xor_ps(Raw, _mm_set1_ps(-0.0f)) }; }
 
         //Vector-vector
         AVXF3 operator+(const AVXF3& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
@@ -1270,12 +1270,12 @@ namespace VFX {
     //AVXF4 type, 4 floats
     struct alignas(16) AVXF4 {
         __m128 Raw;
-
-        #if defined(VECTOR_IO) && defined(XMATH_IO)
         AVXF4() = default;
-        AVXF4(__m128 Source) : Raw(Source) {}             // in:  AVXF3 A = XMVECTOR / __m128
-        operator DirectX::XMVECTOR() const { return Raw; }  // out: static_cast<XMVECTOR>(A)
-        #endif
+        AVXF4(__m128 Source) : Raw(Source) {}
+        explicit operator __m128() const { return Raw; }
+
+        //Single vector
+        AVXF4 operator-() const { return { _mm_xor_ps(Raw, _mm_set1_ps(-0.0f)) }; }
 
         //Vector-vector
         AVXF4 operator+(const AVXF4& Second) const { return { _mm_add_ps(Raw, Second.Raw) }; }
