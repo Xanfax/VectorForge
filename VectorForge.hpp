@@ -41,9 +41,6 @@
 #    include <type_traits>
 #    include <DirectXMath.h>
 #    define XMATH_IO 1
-#    if (defined(_XM_SSE_INTRINSICS_) || !defined(_XM_NO_INTRINSICS_))
-#       define VECTOR_IO 1
-#    endif
 #  endif
 #endif
 
@@ -72,6 +69,10 @@ namespace VFX {
     // defined here: all three are standard-layout structs with the same
     // member sequence, so the common initial sequence rule covers every
     // member.
+    // 
+    // + - * go through types of the same width unsigned, so overflow wraps 
+    // like AVXI4 instead of being undefined. Lanes stay signed, 
+    // the sum converts back on assignment.
     //=====================================================================
     #pragma region Storage_Vectors
     //Float2 type
@@ -722,20 +723,20 @@ namespace VFX {
         //Vector-vector
         int2 operator+(const int2 Second) const {
             int2 Result;
-            Result.x = x + Second.x;
-            Result.y = y + Second.y;
+            Result.x = uint64_t(x) + Second.x;
+            Result.y = uint64_t(y) + Second.y;
             return Result;
         }
         int2 operator-(const int2 Second) const {
             int2 Result;
-            Result.x = x - Second.x;
-            Result.y = y - Second.y;
+            Result.x = uint64_t(x) - Second.x;
+            Result.y = uint64_t(y) - Second.y;
             return Result;
         }
         int2 operator*(const int2 Second) const {
             int2 Result;
-            Result.x = x * Second.x;
-            Result.y = y * Second.y;
+            Result.x = uint64_t(x) * Second.x;
+            Result.y = uint64_t(y) * Second.y;
             return Result;
         }
         int2 operator/(const int2 Second) const {
@@ -748,20 +749,20 @@ namespace VFX {
         //Vector-scalar
         int2 operator+(const int64_t Second) const {
             int2 Result;
-            Result.x = x + Second;
-            Result.y = y + Second;
+            Result.x = uint64_t(x) + Second;
+            Result.y = uint64_t(y) + Second;
             return Result;
         }
         int2 operator-(const int64_t Second) const {
             int2 Result;
-            Result.x = x - Second;
-            Result.y = y - Second;
+            Result.x = uint64_t(x) - Second;
+            Result.y = uint64_t(y) - Second;
             return Result;
         }
         int2 operator*(const int64_t Second) const {
             int2 Result;
-            Result.x = x * Second;
-            Result.y = y * Second;
+            Result.x = uint64_t(x) * Second;
+            Result.y = uint64_t(y) * Second;
             return Result;
         }
         int2 operator/(const int64_t Second) const {
@@ -799,23 +800,23 @@ namespace VFX {
         //Vector-vector
         int3 operator+(const int3 Second) const {
             int3 Result;
-            Result.x = x + Second.x;
-            Result.y = y + Second.y;
-            Result.z = z + Second.z;
+            Result.x = uint64_t(x) + Second.x;
+            Result.y = uint64_t(y) + Second.y;
+            Result.z = uint64_t(z) + Second.z;
             return Result;
         }
         int3 operator-(const int3 Second) const {
             int3 Result;
-            Result.x = x - Second.x;
-            Result.y = y - Second.y;
-            Result.z = z - Second.z;
+            Result.x = uint64_t(x) - Second.x;
+            Result.y = uint64_t(y) - Second.y;
+            Result.z = uint64_t(z) - Second.z;
             return Result;
         }
         int3 operator*(const int3 Second) const {
             int3 Result;
-            Result.x = x * Second.x;
-            Result.y = y * Second.y;
-            Result.z = z * Second.z;
+            Result.x = uint64_t(x) * Second.x;
+            Result.y = uint64_t(y) * Second.y;
+            Result.z = uint64_t(z) * Second.z;
             return Result;
         }
         int3 operator/(const int3 Second) const {
@@ -829,23 +830,23 @@ namespace VFX {
         //Vector-scalar
         int3 operator+(const int64_t Second) const {
             int3 Result;
-            Result.x = x + Second;
-            Result.y = y + Second;
-            Result.z = z + Second;
+            Result.x = uint64_t(x) + Second;
+            Result.y = uint64_t(y) + Second;
+            Result.z = uint64_t(z) + Second;
             return Result;
         }
         int3 operator-(const int64_t Second) const {
             int3 Result;
-            Result.x = x - Second;
-            Result.y = y - Second;
-            Result.z = z - Second;
+            Result.x = uint64_t(x) - Second;
+            Result.y = uint64_t(y) - Second;
+            Result.z = uint64_t(z) - Second;
             return Result;
         }
         int3 operator*(const int64_t Second) const {
             int3 Result;
-            Result.x = x * Second;
-            Result.y = y * Second;
-            Result.z = z * Second;
+            Result.x = uint64_t(x) * Second;
+            Result.y = uint64_t(y) * Second;
+            Result.z = uint64_t(z) * Second;
             return Result;
         }
         int3 operator/(const int64_t Second) const {
@@ -884,26 +885,26 @@ namespace VFX {
         //Vector-vector
         int4 operator+(const int4 Second) const {
             int4 Result;
-            Result.x = x + Second.x;
-            Result.y = y + Second.y;
-            Result.z = z + Second.z;
-            Result.w = w + Second.w;
+            Result.x = uint64_t(x) + Second.x;
+            Result.y = uint64_t(y) + Second.y;
+            Result.z = uint64_t(z) + Second.z;
+            Result.w = uint64_t(w) + Second.w;
             return Result;
         }
         int4 operator-(const int4 Second) const {
             int4 Result;
-            Result.x = x - Second.x;
-            Result.y = y - Second.y;
-            Result.z = z - Second.z;
-            Result.w = w - Second.w;
+            Result.x = uint64_t(x) - Second.x;
+            Result.y = uint64_t(y) - Second.y;
+            Result.z = uint64_t(z) - Second.z;
+            Result.w = uint64_t(w) - Second.w;
             return Result;
         }
         int4 operator*(const int4 Second) const {
             int4 Result;
-            Result.x = x * Second.x;
-            Result.y = y * Second.y;
-            Result.z = z * Second.z;
-            Result.w = w * Second.w;
+            Result.x = uint64_t(x) * Second.x;
+            Result.y = uint64_t(y) * Second.y;
+            Result.z = uint64_t(z) * Second.z;
+            Result.w = uint64_t(w) * Second.w;
             return Result;
         }
         int4 operator/(const int4 Second) const {
@@ -918,26 +919,26 @@ namespace VFX {
         //Vector-scalar
         int4 operator+(const int64_t Second) const {
             int4 Result;
-            Result.x = x + Second;
-            Result.y = y + Second;
-            Result.z = z + Second;
-            Result.w = w + Second;
+            Result.x = uint64_t(x) + Second;
+            Result.y = uint64_t(y) + Second;
+            Result.z = uint64_t(z) + Second;
+            Result.w = uint64_t(w) + Second;
             return Result;
         }
         int4 operator-(const int64_t Second) const {
             int4 Result;
-            Result.x = x - Second;
-            Result.y = y - Second;
-            Result.z = z - Second;
-            Result.w = w - Second;
+            Result.x = uint64_t(x) - Second;
+            Result.y = uint64_t(y) - Second;
+            Result.z = uint64_t(z) - Second;
+            Result.w = uint64_t(w) - Second;
             return Result;
         }
         int4 operator*(const int64_t Second) const {
             int4 Result;
-            Result.x = x * Second;
-            Result.y = y * Second;
-            Result.z = z * Second;
-            Result.w = w * Second;
+            Result.x = uint64_t(x) * Second;
+            Result.y = uint64_t(y) * Second;
+            Result.z = uint64_t(z) * Second;
+            Result.w = uint64_t(w) * Second;
             return Result;
         }
         int4 operator/(const int64_t Second) const {
@@ -976,21 +977,21 @@ namespace VFX {
         int8 operator+(const int8 Second) const {
             int8 Result;
             for (size_t Index = 0; Index < 8; Index++) {
-                Result.Data[Index] = Data[Index] + Second.Data[Index];
+                Result.Data[Index] = uint32_t(Data[Index]) + Second.Data[Index];
             }
             return Result;
         }
         int8 operator-(const int8 Second) const {
             int8 Result;
             for (size_t Index = 0; Index < 8; Index++) {
-                Result.Data[Index] = Data[Index] - Second.Data[Index];
+                Result.Data[Index] = uint32_t(Data[Index]) - Second.Data[Index];
             }
             return Result;
         }
         int8 operator*(const int8 Second) const {
             int8 Result;
             for (size_t Index = 0; Index < 8; Index++) {
-                Result.Data[Index] = Data[Index] * Second.Data[Index];
+                Result.Data[Index] = uint32_t(Data[Index]) * Second.Data[Index];
             }
             return Result;
         }
@@ -1006,21 +1007,21 @@ namespace VFX {
         int8 operator+(const int32_t Second) const {
             int8 Result;
             for (size_t Index = 0; Index < 8; Index++) {
-                Result.Data[Index] = Data[Index] + Second;
+                Result.Data[Index] = uint32_t(Data[Index]) + Second;
             }
             return Result;
         }
         int8 operator-(const int32_t Second) const {
             int8 Result;
             for (size_t Index = 0; Index < 8; Index++) {
-                Result.Data[Index] = Data[Index] - Second;
+                Result.Data[Index] = uint32_t(Data[Index]) - Second;
             }
             return Result;
         }
         int8 operator*(const int32_t Second) const {
             int8 Result;
             for (size_t Index = 0; Index < 8; Index++) {
-                Result.Data[Index] = Data[Index] * Second;
+                Result.Data[Index] = uint32_t(Data[Index]) * Second;
             }
             return Result;
         }
@@ -1768,12 +1769,13 @@ namespace VFX {
     inline void Truncate(const AVXF3& Source, AVXF3& Destination) {
         Destination = { _mm_round_ps(Source.Raw, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC) };
     }
-    inline void Clamp(const AVXF3& Source, AVXF3& Destination, const AVXF3& Min, const AVXF3& Max) {
+    inline void Clamp(const AVXF3& Source, const AVXF3& Min, const AVXF3& Max, AVXF3& Destination) {
         AVXF3 Bounded;
         Maximum(Source, Min, Bounded);
         Minimum(Bounded, Max, Destination);
     }
     inline void Lerp(const AVXF3& A, const AVXF3& B, AVXF3& Destination, const float Amount) { Destination = A + (B - A) * Amount; }
+
     //Float4
     inline void SquareRoot(const AVXF4& Source, AVXF4& Destination) { Destination = { _mm_sqrt_ps(Source.Raw) }; }
     inline void Minimum(const AVXF4& A, const AVXF4& B, AVXF4& Destination) { Destination = { _mm_min_ps(A.Raw, B.Raw) }; }
@@ -1788,7 +1790,7 @@ namespace VFX {
     inline void Truncate(const AVXF4& Source, AVXF4& Destination) {
         Destination = { _mm_round_ps(Source.Raw, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC) };
     }
-    inline void Clamp(const AVXF4& Source, AVXF4& Destination, const AVXF4& Min, const AVXF4& Max) {
+    inline void Clamp(const AVXF4& Source, const AVXF4& Min, const AVXF4& Max, AVXF4& Destination) {
         AVXF4 Bounded;
         Maximum(Source, Min, Bounded);
         Minimum(Bounded, Max, Destination);
@@ -1809,7 +1811,7 @@ namespace VFX {
     inline void Truncate(const AVXF8& Source, AVXF8& Destination) {
         Destination = { _mm256_round_ps(Source.Raw, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC) };
     }
-    inline void Clamp(const AVXF8& Source, AVXF8& Destination, const AVXF8& Min, const AVXF8& Max) {
+    inline void Clamp(const AVXF8& Source, const AVXF8& Min, const AVXF8& Max, AVXF8& Destination) {
         AVXF8 Bounded;
         Maximum(Source, Min, Bounded);
         Minimum(Bounded, Max, Destination);
@@ -1830,7 +1832,7 @@ namespace VFX {
     inline void Truncate(const AVXD4& Source, AVXD4& Destination) {
         Destination = { _mm256_round_pd(Source.Raw, _MM_FROUND_TO_ZERO | _MM_FROUND_NO_EXC) };
     }
-    inline void Clamp(const AVXD4& Source, AVXD4& Destination, const AVXD4& Min, const AVXD4& Max) {
+    inline void Clamp(const AVXD4& Source, const AVXD4& Min, const AVXD4& Max, AVXD4& Destination) {
         AVXD4 Bounded;
         Maximum(Source, Min, Bounded);
         Minimum(Bounded, Max, Destination);
@@ -1838,6 +1840,7 @@ namespace VFX {
     inline void Lerp(const AVXD4& A, const AVXD4& B, AVXD4& Destination, const double Amount) { Destination = A + (B - A) * Amount; }
 
     //~~~~~~~ 4x64bit
+    //64bit min / max / abs need AVX-512F + VL
     inline void Minimum(const AVXI4&, const AVXI4&, AVXI4&) = delete;
     inline void UnsignedMinimum(const AVXI4&, const AVXI4&, AVXI4&) = delete;
     inline void Maximum(const AVXI4&, const AVXI4&, AVXI4&) = delete;
