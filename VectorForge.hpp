@@ -85,7 +85,7 @@ namespace VFX {
 
         #ifdef XMATH_IO
         float2(const DirectX::XMFLOAT2& Source) { x = Source.x; y = Source.y; }
-        operator DirectX::XMFLOAT2() const { return DirectX::XMFLOAT2(x, y); }
+        explicit operator DirectX::XMFLOAT2() const { return DirectX::XMFLOAT2(x, y); }
         #endif
 
         //Vector-vector
@@ -170,7 +170,7 @@ namespace VFX {
 
         #ifdef XMATH_IO
         float3(const DirectX::XMFLOAT3& Source) { x = Source.x; y = Source.y; z = Source.z; }
-        operator DirectX::XMFLOAT3() const { return DirectX::XMFLOAT3(x, y, z); }
+        explicit operator DirectX::XMFLOAT3() const { return DirectX::XMFLOAT3(x, y, z); }
         #endif
 
         //Vector-vector
@@ -263,7 +263,7 @@ namespace VFX {
 
         #ifdef XMATH_IO
         float4(const DirectX::XMFLOAT4& Source) { x = Source.x; y = Source.y; z = Source.z; w = Source.w; }
-        operator DirectX::XMFLOAT4() const { return DirectX::XMFLOAT4(x, y, z, w); }
+        explicit operator DirectX::XMFLOAT4() const { return DirectX::XMFLOAT4(x, y, z, w); }
         #endif
 
         //Vector-vector
