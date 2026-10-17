@@ -1682,12 +1682,12 @@ namespace VFX {
     inline double LengthSquared(const double3& Source) { return DotProduct(Source, Source); }
     inline double LengthSquared(const double4& Source) { return DotProduct(Source, Source); }
 
-    inline float Length(const float2& Source) { return sqrtf(LengthSquared(Source)); }
-    inline float Length(const float3& Source) { return sqrtf(LengthSquared(Source)); }
-    inline float Length(const float4& Source) { return sqrtf(LengthSquared(Source)); }
-    inline double Length(const double2& Source) { return sqrt(LengthSquared(Source)); }
-    inline double Length(const double3& Source) { return sqrt(LengthSquared(Source)); }
-    inline double Length(const double4& Source) { return sqrt(LengthSquared(Source)); }
+    inline float Length(const float2& Source) { return std::sqrt(LengthSquared(Source)); }
+    inline float Length(const float3& Source) { return std::sqrt(LengthSquared(Source)); }
+    inline float Length(const float4& Source) { return std::sqrt(LengthSquared(Source)); }
+    inline double Length(const double2& Source) { return std::sqrt(LengthSquared(Source)); }
+    inline double Length(const double3& Source) { return std::sqrt(LengthSquared(Source)); }
+    inline double Length(const double4& Source) { return std::sqrt(LengthSquared(Source)); }
 
     inline void Normalize(const float2& Source, float2& Destination) { Destination = Source / Length(Source); }
     inline void Normalize(const float3& Source, float3& Destination) { Destination = Source / Length(Source); }
@@ -1838,7 +1838,6 @@ namespace VFX {
     inline void Lerp(const AVXD4& A, const AVXD4& B, AVXD4& Destination, const double Amount) { Destination = A + (B - A) * Amount; }
 
     //~~~~~~~ 4x64bit
-    //All three need AVX - 512F + VL, so are unavailable in this version
     inline void Minimum(const AVXI4&, const AVXI4&, AVXI4&) = delete;
     inline void UnsignedMinimum(const AVXI4&, const AVXI4&, AVXI4&) = delete;
     inline void Maximum(const AVXI4&, const AVXI4&, AVXI4&) = delete;
